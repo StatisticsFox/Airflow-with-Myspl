@@ -74,4 +74,9 @@ AIRFLOW_UID=50000
 AIRFLOW_GID=0
 ```
 
+## 6. docker-comose up
+localhost:8080에 들어가보면 아래처럼 성공적으로 airflow에 접속한 것을 알 수 있다. <br> 
+초기 ID:PW는 airflow:airflow다. 
+<img width="1508" alt="image" src="https://github.com/StatisticsFox/Airflow-with-Myspl/assets/92065443/ed063082-576f-44c4-9d26-4cb69e67f11b">
+
 
