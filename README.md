@@ -19,10 +19,12 @@ Airfflow와 mysql을 연동하는 과정을 담은 레포입니다. 다른 프�
 - Processor: 8 core CPU
 
 ## 2. Create docker-compose.yaml
+먼저 아래 명령어를 통해 docker-compose.yaml파일을 다운받아 준다. 
 ```zsh
 curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.3.3/docker-compose.yaml'
 ```
-그 후 생성된 yaml 파일의 services: 부분에 아래처럼 mysql을 입력해주자
+
+그 후 생성된 yaml 파일의 services: 부분에 아래처럼 mysql service를 입력해주자
 ```yaml
  mysql:
 
@@ -38,12 +40,14 @@ curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.3.3/docker-compose.y
 
 ## 3. Create Dockerfile
 아래 내용으로 Dockerfile을 만들어준다.
+
 ```Dockerfile
 FROM apache/airflow:2.3.3
 COPY requirements.txt /requirements.txt
 RUN pip install --user --upgrade pip
 RUN pip install --no-cache-dir --user -r /requirements.txt
 '''
+
 또한 pymysql을 사용하여 mysql을 대체할 예정이기에 requirements.txt파일을 만들고 pymysql을 집어넣어준다.
 
 ```txt
@@ -52,6 +56,7 @@ PyMySQL==1.0.2
 
 ## 4. Build docker image
 이제 아래 명령어로 도커이미지를 만들어준다. 
+
 ```zsh
 docker build . --tag extending_airflow:second
 ```
@@ -63,6 +68,7 @@ image: ${AIRFLOW_IMAGE_NAME:-extending_airflow:second}
 
 ## 5. Create .env file
 UID 오류를 예방하기 위해 UID와 GID를 환경변수 파일에 생성해준다. 
+
 ```.env
 AIRFLOW_UID=50000
 AIRFLOW_GID=0
