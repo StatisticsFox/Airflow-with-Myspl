@@ -1,5 +1,4 @@
 
-
 # Connecting Airflow and mysql
 Airfflow와 mysql을 연동하는 과정을 담은 레포입니다. 다른 프로젝트에서 재사용 가능합니다.
 
@@ -9,8 +8,10 @@ Airfflow와 mysql을 연동하는 과정을 담은 레포입니다. 다른 프�
 3. [Dockerfile 생성](#3-create-dockerfile)
 4. [Docker 이미지 빌드](#4-build-docker-image)
 5. [.env 파일 생성](#5-create-env-file)
-
-
+6. [docker-compose up](#6-docker-comose-up)
+7. [Mysql connect](#7-Mysql-connect)
+8. [Create Test DAG file](#8-Create-Test-DAG-file)
+9. [Check DB connection](#9-Check-DB-connection)
 ## 1. environment
 - Computer: Mac m1 Pro
 - Memory: Ram 16GB
@@ -78,5 +79,45 @@ AIRFLOW_GID=0
 localhost:8080에 들어가보면 아래처럼 성공적으로 airflow에 접속한 것을 알 수 있다. <br> 
 초기 ID:PW는 airflow:airflow다. 
 <img width="1508" alt="image" src="https://github.com/StatisticsFox/Airflow-with-Myspl/assets/92065443/ed063082-576f-44c4-9d26-4cb69e67f11b">
+
+## 7. Mysql connect
+아래처럼 mysql을 연동해준다. 아래 ID 혹은 PW는 본인이 설저한 것으로 넣어주도록 하자
+<img width="635" alt="image" src="https://github.com/StatisticsFox/Airflow-with-Mysql/assets/92065443/58bf6217-37d2-435a-b2b0-953f83b829be">
+
+## 8. Create Test DAG file
+DAGS 폴더를 참조
+```py
+from airflow.operators.mysql_operator import MySqlOperator
+from airflow import DAG
+from datetime import datetime, timedelta
+import pymysql
+pymysql.install_as_MySQLdb()
+
+# 현재 날짜를 start_date로 설정
+default_args = {
+    "owner": "airflow",
+    "start_date": datetime.now(),  # 현재 날짜로 설정
+    "retries": 1,
+    "retry_delay": timedelta(minutes=1)
+}
+
+with DAG(
+    dag_id="workflow",
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False  # 과거 날짜에 대해 작업이 실행되지 않도록 설정
+) as dag:
+    
+    create_table = MySqlOperator(
+        task_id="create_table",
+        mysql_conn_id="mysql_db",
+        sql="CREATE DATABASE qweql",
+    )
+```
+
+## 9. Check DB connection
+잘 연결된것을 확인 가능하다. 
+<img width="603" alt="image" src="https://github.com/StatisticsFox/Airflow-with-Mysql/assets/92065443/5ca69352-b2ae-48ce-a179-c76892ad8c0d">
+
 
 
