@@ -116,7 +116,7 @@ with DAG(
 ```
 
 ## 9. Check DB connection
-잘 연결된것을 확인 가능하다. 
+잘 연결된것을 확인 가능하다. <br>
 <img width="603" alt="image" src="https://github.com/StatisticsFox/Airflow-with-Mysql/assets/92065443/5ca69352-b2ae-48ce-a179-c76892ad8c0d">
 
 
